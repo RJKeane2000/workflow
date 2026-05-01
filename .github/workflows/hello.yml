@@ -1,8 +1,7 @@
 name: Project Status Change
 
 on:
-  - project_card
-  - projects_v2_item
+  project_card:
 
 jobs:
   say-hello:
@@ -13,27 +12,19 @@ jobs:
         run: |
           echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
           echo "github.event.action=${{ github.event.action }}"
-          echo "github.event.projects_v2_item.action=${{ github.event.projects_v2_item.action }}"
+          echo "github.event.project_card.action=${{ github.event.project_card.action }}"
           echo "GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH"
           echo "Event payload:"
           cat "$GITHUB_EVENT_PATH"
 
-      - name: Detect status change
-        if: github.event_name == 'projects_v2_item'
+      - name: Detect project_card details
+        if: github.event_name == 'project_card'
         id: detect
         run: |
-          BEFORE="${{ github.event.changes.status_field_value.from }}"
-          AFTER="${{ github.event.projects_v2_item.status }}"
-
-          echo "Previous status: $BEFORE"
-          echo "New status: $AFTER"
-
-          if [ "$BEFORE" != "$AFTER" ]; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+          echo "project_card id: ${{ github.event.project_card.id }}"
+          echo "project_card column_id: ${{ github.event.project_card.column_id }}"
+          echo "project_card project_id: ${{ github.event.project_card.project_id }}"
+          echo "project_card content_url: ${{ github.event.project_card.content_url }}"
 
       - name: Say hello
-        if: steps.detect.outputs.changed == 'true'
         run: echo "hello"
