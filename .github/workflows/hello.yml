@@ -1,7 +1,8 @@
-name: On Project Item Status Change
+name: On Issue Label Change
 
 on:
-  projects_v2_item:
+  issues:
+    types: [labeled, unlabeled]
 
 jobs:
   on-status-change:
