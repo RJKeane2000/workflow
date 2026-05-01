@@ -1,0 +1,35 @@
+name: Project Status Change
+
+on:
+  projects_v2_item:
+    types:
+      - edited
+
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show event payload (debug)
+        run: |
+          echo "Event payload:"
+          echo "${{ toJson(github.event) }}"
+
+      - name: Detect status change
+        id: detect
+        run: |
+          BEFORE="${{ github.event.changes.status_field_value.from }}"
+          AFTER="${{ github.event.projects_v2_item.status }}"
+
+          echo "Previous status: $BEFORE"
+          echo "New status: $AFTER"
+
+          if [ "$BEFORE" != "$AFTER" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Say hello
+        if: steps.detect.outputs.changed == 'true'
+        run: echo "hello"
