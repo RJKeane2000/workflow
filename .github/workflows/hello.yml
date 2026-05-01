@@ -1,9 +1,10 @@
 name: On Project Item Field Update
 
 on:
-  project_v2_item:
-    types: [updated]
+  projects_v2_item:
+    types: [edited]
 
+permissions: {}
 jobs:
   on-status-change:
     runs-on: ubuntu-latest
