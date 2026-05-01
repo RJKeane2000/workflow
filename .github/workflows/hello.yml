@@ -1,21 +1,25 @@
 name: Project Status Change
 
 on:
+  project_card:
   projects_v2_item:
-    types:
-      - edited
 
 jobs:
   say-hello:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Show event payload (debug)
+      - name: Show event context and payload (debug)
         run: |
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+          echo "github.event.action=${{ github.event.action }}"
+          echo "github.event.projects_v2_item.action=${{ github.event.projects_v2_item.action }}"
+          echo "GITHUB_EVENT_PATH=$GITHUB_EVENT_PATH"
           echo "Event payload:"
-          echo "${{ toJson(github.event) }}"
+          cat "$GITHUB_EVENT_PATH"
 
       - name: Detect status change
+        if: github.event_name == 'projects_v2_item'
         id: detect
         run: |
           BEFORE="${{ github.event.changes.status_field_value.from }}"
