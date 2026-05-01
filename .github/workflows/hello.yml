@@ -1,7 +1,7 @@
 name: On Project Item Field Update
 
 on:
-  projects_v2_item:
+  project_v2_item:
     types: [updated]
 
 jobs:
