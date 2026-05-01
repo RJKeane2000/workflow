@@ -2,16 +2,19 @@ name: On Project Item Status Change
 
 on:
   projects_v2_item:
-    types: [edited]
 
 jobs:
   on-status-change:
     runs-on: ubuntu-latest
     steps:
       - name: Dump webhook payload for debugging
-        run: echo "${{ toJson(github.event) }}"
-      
-      # Example: Check if the status custom field changed
+        run: |
+          echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+          echo "github.event.action=${{ github.event.action }}"
+          echo "github.event.projects_v2_item.action=${{ github.event.projects_v2_item.action }}"
+          echo "--- raw event payload ---"
+          echo "${{ toJson(github.event) }}"
+
       - name: Check status change
         id: filter
         run: |
